@@ -45,7 +45,7 @@ const UserModal = ({
     // Remove spaces and special characters
     const cleanPhone = phone.replace(/[\s-]/g, "");
 
-    // Sri Lankan phone number patterns:
+    // lk phone number patterns:
     // +94XXXXXXXXX (with country code)
     // 0XXXXXXXXX (without country code)
     // Mobile numbers start with 07 or +947
@@ -59,7 +59,7 @@ const UserModal = ({
     // Remove all non-digit characters
     let cleaned = value.replace(/\D/g, "");
 
-    // Handle Sri Lankan format
+    // Handle LK format
     if (cleaned.startsWith("94")) {
       cleaned = cleaned.substring(2);
     }

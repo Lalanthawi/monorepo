@@ -14,7 +14,7 @@ const DailyTasksReportModal = ({ tasks, onClose }) => {
   const generateReport = () => {
     // Filter tasks for selected date
     const filteredTasks = tasks.filter((task) => {
-      const taskDate = new Date(task.scheduledDate).toISOString().split("T")[0];
+      const taskDate = task.scheduledDate;
       return taskDate === selectedDate;
     });
 
@@ -27,9 +27,8 @@ const DailyTasksReportModal = ({ tasks, onClose }) => {
       inProgress: filteredTasks.filter((t) => t.status === "In Progress")
         .length,
       newTasks: filteredTasks.filter((t) => {
-        const createdDate = new Date(t.createdAt || t.created_at)
-          .toISOString()
-          .split("T")[0];
+        const createdAtValue = t.createdAt || t.created_at;
+        const createdDate = createdAtValue && createdAtValue.includes("T") ? createdAtValue.split("T")[0] : createdAtValue;
         return createdDate === selectedDate;
       }).length,
     };

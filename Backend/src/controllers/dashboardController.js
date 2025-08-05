@@ -223,7 +223,6 @@ const markNotificationRead = async (req, res) => {
 
 // Generate report - SIMPLIFIED VERSION FOR MANAGER REPORTS ONLY
 const generateReport = async (req, res) => {
-  console.log('generateReport called with:', { report_type: req.body.report_type, userId: req.user.id });
   
   try {
     const { report_type, start_date, end_date } = req.body;
@@ -243,7 +242,6 @@ const generateReport = async (req, res) => {
 
         try {
           // Get performance data for electricians - Last 12 months
-          console.log('Executing user_performance query for last 12 months...');
           const performanceQuery =
             `SELECT 
               u.id,
@@ -276,12 +274,9 @@ const generateReport = async (req, res) => {
             GROUP BY u.id, u.full_name, u.employee_code
             ORDER BY u.full_name`;
             
-          console.log('Performance query:', performanceQuery);
           const [performance] = await db.query(performanceQuery, []);
-          console.log('Performance result count:', performance.length);
 
           // Get summary statistics - Last 12 months
-          console.log('Executing summary stats query for last 12 months...');
           const summaryQuery = `SELECT 
               COUNT(DISTINCT u.id) as total_electricians,
               COUNT(t.id) as total_tasks_assigned,
@@ -294,10 +289,8 @@ const generateReport = async (req, res) => {
             WHERE u.role = 'Electrician' AND u.status = 'Active'`;
             
           const [[summaryStats]] = await db.query(summaryQuery);
-          console.log('Summary stats:', summaryStats);
 
           // Identify best performer - Last 12 months
-          console.log('Executing best performer query for last 12 months...');
           const bestPerformerQuery = `SELECT 
               u.full_name,
               COUNT(t.id) as task_count,
@@ -314,7 +307,6 @@ const generateReport = async (req, res) => {
             LIMIT 1`;
             
           const [[bestPerformer]] = await db.query(bestPerformerQuery);
-          console.log('Best performer:', bestPerformer);
 
           reportData = {
             performance: performance || [],
@@ -586,7 +578,6 @@ const generateReport = async (req, res) => {
       // Continue without logging
     }
 
-    console.log('Sending report response:', JSON.stringify({ success: true, data: reportData }, null, 2));
     res.json({
       success: true,
       data: reportData,

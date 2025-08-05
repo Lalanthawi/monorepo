@@ -62,10 +62,10 @@ const CreateTaskModal = ({ onClose, onCreate }) => {
       newErrors.customer_name = "Customer name is required";
     }
 
-    // Phone validation (10 digits)
+    // Phone validation (10 digits - supports both mobile and landline)
     const phoneRegex = /^[0-9]{10}$/;
     if (!phoneRegex.test(formData.customer_phone.replace(/\D/g, ""))) {
-      newErrors.customer_phone = "Please enter a valid 10-digit phone number";
+      newErrors.customer_phone = "Please enter a valid 10-digit phone number (mobile: 07X XXX XXXX or landline: 0XX XXX XXXX)";
     }
 
     // Address validation
@@ -114,7 +114,7 @@ const CreateTaskModal = ({ onClose, onCreate }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Format phone number as user types
+    // Format phone number as user types (support both mobile and landline)
     if (name === "customer_phone") {
       const formatted = value.replace(/\D/g, "").slice(0, 10);
       setFormData({
@@ -225,7 +225,7 @@ const CreateTaskModal = ({ onClose, onCreate }) => {
                   name="customer_phone"
                   value={formData.customer_phone}
                   onChange={handleChange}
-                  placeholder="0771234567"
+                  placeholder="0771234567 or 0812345678"
                   maxLength="10"
                   className={errors.customer_phone ? "error" : ""}
                 />

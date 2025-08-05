@@ -40,4 +40,6 @@ export const usersService = {
   getElectricians: () => apiRequest("/users/electricians"),
 
   getElectriciansWorkload: () => apiRequest("/tasks/electricians-workload"),
+
+  getProfile: () => apiRequest("/users/profile"),
 };

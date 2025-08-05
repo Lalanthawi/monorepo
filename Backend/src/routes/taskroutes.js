@@ -36,7 +36,6 @@
 
 const express = require("express");
 const router = express.Router();
-console.log("=== Task Routes Loading ==="); // debug log
 const taskController = require("../controllers/taskController");
 const { authenticateToken, authorizeRoles } = require("../middleware/auth");
 const { taskValidationRules, validate } = require("../middleware/validation");
@@ -94,7 +93,5 @@ router.delete(
   taskController.deleteTask
 );
 
-console.log("Total routes registered:", router.stack.length);
-console.log("=========================");
 
 module.exports = router;

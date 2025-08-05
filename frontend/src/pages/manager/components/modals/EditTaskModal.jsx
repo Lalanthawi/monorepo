@@ -23,9 +23,7 @@ const EditTaskModal = ({ task, onClose, onUpdate }) => {
         customer_address: task.customerAddress || "",
         customer_phone: task.customerPhone || "",
         priority: task.priority || "Medium",
-        scheduled_date: task.scheduledDate
-          ? task.scheduledDate.split("T")[0]
-          : "",
+        scheduled_date: task.scheduledDate || "",
         scheduled_time_start: task.scheduledTimeStart || "",
         scheduled_time_end: task.scheduledTimeEnd || "",
         estimated_hours: task.estimatedHours || "",
@@ -107,6 +105,7 @@ const EditTaskModal = ({ task, onClose, onUpdate }) => {
                   <option value="Low">Low</option>
                   <option value="Medium">Medium</option>
                   <option value="High">High</option>
+                  <option value="Urgent">Urgent</option>
                 </select>
               </div>
             </div>

@@ -1,5 +1,5 @@
 // components/Sidebar.jsx
-const Sidebar = ({ activeSection, setActiveSection, handleLogout }) => {
+const Sidebar = ({ activeSection, setActiveSection, handleLogout, currentUser }) => {
   return (
     <aside className="sidebar">
       <div className="logo">
@@ -32,10 +32,14 @@ const Sidebar = ({ activeSection, setActiveSection, handleLogout }) => {
 
       <div className="sidebar-footer">
         <div className="admin-info">
-          <div className="admin-avatar">AD</div>
+          <div className="admin-avatar">
+            {currentUser?.full_name 
+              ? currentUser.full_name.split(' ').map(n => n[0]).join('').toUpperCase()
+              : 'AD'}
+          </div>
           <div>
-            <p className="admin-name">Admin User</p>
-            <p className="admin-email">admin@company.com</p>
+            <p className="admin-name">{currentUser?.full_name || 'Admin User'}</p>
+            <p className="admin-email">{currentUser?.email || 'admin@company.com'}</p>
           </div>
         </div>
         <button className="logout-btn" onClick={handleLogout}>

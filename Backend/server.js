@@ -59,14 +59,10 @@ const taskRoutes = require("./src/routes/taskroutes"); // task crud operations
 const dashboardRoutes = require("./src/routes/dashboardRoutes"); // dashboard data
 const issuesRoutes = require("./src/routes/issuesRoutes"); // issue reporting
 
-// debug logs (TODO: remove these before production!)
-console.log("Task routes type:", typeof taskRoutes); // making sure routes load properly
-console.log("Task routes:", taskRoutes); // debug info
 
 // mount all the route handlers
 app.use("/api/auth", authRoutes); // authentication endpoints
 app.use("/api/users", userRoutes); // user management endpoints
-console.log("Mounting task routes at /api/tasks"); // debug log
 app.use("/api/tasks", taskRoutes); // task management endpoints
 app.use("/api/dashboard", dashboardRoutes); // dashboard data endpoints
 app.use("/api/issues", issuesRoutes); // issue reporting endpoints

@@ -42,7 +42,6 @@ const login = async (req, res) => {
     const { email, password } = req.body;
     
     // TODO: add input validation middleware instead of doing it here
-    // console.log('Login attempt for:', email); // debug - remove before production
 
     // find user by email (only active users can login)
     const [users] = await db.query(

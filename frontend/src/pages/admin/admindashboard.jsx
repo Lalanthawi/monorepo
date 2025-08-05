@@ -44,6 +44,9 @@ const AdminDashboard = () => {
   // Recent activities
   const [activities, setActivities] = useState([]);
 
+  // Current user data
+  const [currentUser, setCurrentUser] = useState(null);
+
   // Form state for user modal
   const [formData, setFormData] = useState({
     username: "",
@@ -90,6 +93,12 @@ const AdminDashboard = () => {
         setUsers(
           usersResponse.data.filter((user) => user.status !== "Deleted")
         );
+      }
+
+      // Load current user profile
+      const profileResponse = await usersService.getProfile();
+      if (profileResponse.success) {
+        setCurrentUser(profileResponse.data);
       }
 
       // Load recent activities
@@ -214,6 +223,7 @@ const AdminDashboard = () => {
         activeSection={activeSection}
         setActiveSection={setActiveSection}
         handleLogout={handleLogout}
+        currentUser={currentUser}
       />
 
       {/* Main Content */}

@@ -118,12 +118,12 @@ const createUser = async (req, res) => {
     const userId = userResult.insertId;
 
     // If electrician, add details
-    if (role === "Electrician" && employee_code) {
+    if (role === "Electrician") {
       await connection.query(
         `INSERT INTO electrician_details 
-         (electrician_id, employee_code, skills, certifications, join_date) 
-         VALUES (?, ?, ?, ?, CURDATE())`,
-        [userId, employee_code, skills, certifications]
+         (electrician_id, skills, certifications, join_date) 
+         VALUES (?, ?, ?, CURDATE())`,
+        [userId, skills || "", certifications || ""]
       );
     }
 

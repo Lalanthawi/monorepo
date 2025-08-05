@@ -761,7 +761,3 @@ module.exports = {
   deleteTask,
 };
 
-console.log("=== Task Controller Export Check ===");
-console.log("updateTask function exists:", typeof updateTask === "function");
-console.log("All exported methods:", Object.keys(module.exports));
-console.log("===================================");

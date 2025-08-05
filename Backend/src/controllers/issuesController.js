@@ -59,13 +59,7 @@ const getAllIssues = async (req, res) => {
 
     query += " ORDER BY i.created_at DESC";
 
-    console.log("Executing issues query:", query);
-    console.log("Query params:", params);
-    
     const [issues] = await pool.query(query, params);
-    
-    console.log(`Found ${issues.length} issues`);
-    console.log("First issue sample:", issues[0]);
     
     res.json({
       success: true,

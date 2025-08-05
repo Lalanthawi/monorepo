@@ -123,6 +123,27 @@ class ManagerService {
   };
 
   // Helper methods
+  formatDate = (dateString, compensateTimezone = false) => {
+    if (!dateString) return "";
+    
+    // Handle both YYYY-MM-DD and full ISO date strings
+    let dateStr = dateString.includes("T") ? dateString.split("T")[0] : dateString;
+    
+    // Add +1 day compensation when explicitly requested (for timezone issues)
+    if (compensateTimezone) {
+      try {
+        const date = new Date(dateStr + "T12:00:00"); // Use noon to avoid timezone issues
+        date.setDate(date.getDate() + 1); // Add 1 day
+        return date.toISOString().split("T")[0];
+      } catch (error) {
+        // If date parsing fails, return original
+        return dateStr;
+      }
+    }
+    
+    return dateStr;
+  };
+
   formatTime = (timeString) => {
     if (!timeString) return "";
 
@@ -159,7 +180,7 @@ class ManagerService {
     status: task.status,
     assignedTo: task.assigned_to,
     assignedElectrician: task.assigned_electrician,
-    scheduledDate: task.scheduled_date,
+    scheduledDate: this.formatDate(task.scheduled_date, true),
     scheduledTimeStart: task.scheduled_time_start,
     scheduledTimeEnd: task.scheduled_time_end,
     estimatedHours: task.estimated_hours,

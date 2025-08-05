@@ -306,6 +306,11 @@ body {
   color: #2563eb;
 }
 
+.priority.urgent {
+  background: #fecaca;
+  color: #b91c1c;
+}
+
 .status-badge {
   padding: 4px 12px;
   border-radius: 12px;

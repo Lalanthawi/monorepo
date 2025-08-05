@@ -4,25 +4,34 @@ const { body, validationResult } = require("express-validator");
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    const errorMessages = errors.array().map(error => `${error.path}: ${error.msg}`).join(", ");
+    return res.status(400).json({ 
+      success: false,
+      message: `Validation failed: ${errorMessages}`,
+      errors: errors.array() 
+    });
   }
   next();
 };
 
-// Sri Lankan phone number validator
+// Sri Lankan phone number validator (supports both mobile and landline)
 const isSriLankanPhone = (value) => {
   if (!value) return false;
 
-  // Remove spaces and dashes
-  const cleanPhone = value.replace(/[\s-]/g, "");
+  // Remove spaces, dashes, and parentheses
+  const cleanPhone = value.replace(/[\s\-\(\)]/g, "");
 
   // Sri Lankan phone number patterns:
-  // +94XXXXXXXXX (with country code)
-  // 0XXXXXXXXX (without country code)
-  // Mobile numbers start with 07 or +947
-  const sriLankanPhoneRegex = /^(?:\+94|0)?7[0-9]{8}$/;
+  // Mobile: +94XXXXXXXXX or 0XXXXXXXXX (starts with 07)
+  // Landline: +94XXXXXXXXX or 0XXXXXXXXX (starts with 01, 02, 03, 04, 05, 06, 08, 09)
+  
+  // Mobile pattern: starts with 07 or +947
+  const mobileRegex = /^(?:\+94|0)?7[0-9]{8}$/;
+  
+  // Landline pattern: starts with 01-06, 08, 09 or +941-6, +948, +949
+  const landlineRegex = /^(?:\+94|0)?[1-6,8-9][0-9]{8}$/;
 
-  return sriLankanPhoneRegex.test(cleanPhone);
+  return mobileRegex.test(cleanPhone) || landlineRegex.test(cleanPhone);
 };
 
 // Full name validator
@@ -76,7 +85,7 @@ const userValidationRules = () => {
       .withMessage("Phone number is required")
       .custom(isSriLankanPhone)
       .withMessage(
-        "Please enter a valid Sri Lankan mobile number (07X XXX XXXX)"
+        "Please enter a valid Sri Lankan phone number (mobile: 07X XXX XXXX or landline: 0XX XXX XXXX)"
       ),
     body("role")
       .isIn(["Admin", "Manager", "Electrician"])
@@ -87,11 +96,42 @@ const userValidationRules = () => {
 // Task validation rules
 const taskValidationRules = () => {
   return [
-    body("title").notEmpty().trim().escape(),
+    body("title")
+      .notEmpty()
+      .trim()
+      .escape()
+      .withMessage("Task title is required"),
     body("description").optional().trim().escape(),
-    body("priority").isIn(["High", "Medium", "Low"]),
-    body("scheduled_date").isDate(),
-    body("estimated_hours").isNumeric(),
+    body("customer_name")
+      .notEmpty()
+      .trim()
+      .escape()
+      .withMessage("Customer name is required"),
+    body("customer_phone")
+      .notEmpty()
+      .withMessage("Customer phone is required")
+      .custom(isSriLankanPhone)
+      .withMessage("Please enter a valid Sri Lankan phone number (mobile or landline)"),
+    body("customer_address")
+      .notEmpty()
+      .trim()
+      .escape()
+      .withMessage("Customer address is required"),
+    body("priority")
+      .isIn(["High", "Medium", "Low", "Urgent"])
+      .withMessage("Invalid priority value"),
+    body("scheduled_date")
+      .isDate()
+      .withMessage("Invalid scheduled date"),
+    body("scheduled_time_start")
+      .notEmpty()
+      .withMessage("Start time is required"),
+    body("scheduled_time_end")
+      .notEmpty()
+      .withMessage("End time is required"),
+    body("estimated_hours")
+      .isNumeric()
+      .withMessage("Estimated hours must be a number"),
   ];
 };
 

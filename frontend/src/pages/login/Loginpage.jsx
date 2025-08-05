@@ -1,6 +1,6 @@
 /**
  * LOGIN PAGE - User Authentication
- * 
+ *
  * DEVELOPMENT HISTORY:
  * v1.0 - Basic login form with email/password
  * v1.1 - Added form validation and error handling
@@ -8,15 +8,15 @@
  * v1.3 - Added input sanitization and security measures
  * v1.4 - Fixed error display issues and improved UX
  * v1.5 - Current: Added persistent error messages (Jan 2025)
- * 
+ *
  * FEATURES IMPLEMENTED:
  * ✅ Email/password authentication
  * ✅ Role-based redirects after login
  * ✅ Rate limiting (5 attempts = 5min block)
- * ✅ Input validation and sanitization  
+ * ✅ Input validation and sanitization
  * ✅ Error messages with persistence
  * ✅ Responsive design
- * 
+ *
  * TODO / IMPROVEMENTS NEEDED:
  * - Add "Remember Me" checkbox
  * - Implement "Forgot Password" flow
@@ -24,7 +24,7 @@
  * - Better loading states
  * - Add password strength indicator
  * - Two-factor authentication
- * 
+ *
  * KNOWN ISSUES:
  * - Password field clears on failed login (security feature)
  * - Error messages might be too technical for end users
@@ -53,7 +53,7 @@ const Login = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("user");
-    
+
     if (token && user) {
       try {
         const userData = JSON.parse(user);
@@ -94,10 +94,10 @@ const Login = () => {
   // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
+
     // Basic input sanitization
     let sanitizedValue = value;
-    
+
     if (name === "email") {
       // Remove leading/trailing whitespace and convert to lowercase for email
       sanitizedValue = value.trimStart().toLowerCase();
@@ -111,7 +111,7 @@ const Login = () => {
         sanitizedValue = value.substring(0, 128);
       }
     }
-    
+
     setFormData((prev) => ({
       ...prev,
       [name]: sanitizedValue,
@@ -124,7 +124,7 @@ const Login = () => {
         [name]: "",
       }));
     }
-    
+
     // dont clear general error immediately - let it persist for a while after login failure
   };
 
@@ -209,30 +209,33 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Login error:", error);
-      
+
       // Handle specific error types
       let errorMessage = "An unexpected error occurred. Please try again.";
-      
+
       if (error.message) {
         const msg = error.message.toLowerCase();
-        
+
         if (msg.includes("invalid email or password")) {
-          errorMessage = "Invalid email or password. Please check your credentials and try again.";
+          errorMessage =
+            "Invalid email or password. Please check your credentials and try again.";
         } else if (msg.includes("unauthorized")) {
-          errorMessage = "Your account may be inactive. Please contact your administrator.";
+          errorMessage =
+            "Your account may be inactive. Please contact your administrator.";
         } else if (msg.includes("server error") || msg.includes("network")) {
-          errorMessage = "Connection error. Please check your internet connection and try again.";
+          errorMessage =
+            "Connection error. Please check your internet connection and try again.";
         } else if (msg.includes("user not found")) {
           errorMessage = "No account found with this email address.";
         } else {
           errorMessage = error.message;
         }
       }
-      
+
       setErrors({
         general: errorMessage,
       });
-      
+
       // Set timer to keep error message visible for 10 seconds
       const timer = setTimeout(() => {
         setErrors((prev) => ({
@@ -241,27 +244,28 @@ const Login = () => {
         }));
         setErrorTimer(null);
       }, 10000); // 10 seconds
-      
+
       setErrorTimer(timer);
-      
+
       // Increment failed attempts and implement rate limiting
       const newFailedAttempts = failedAttempts + 1;
       setFailedAttempts(newFailedAttempts);
-      
+
       // Block user after 5 failed attempts for 5 minutes
       if (newFailedAttempts >= 5) {
         setIsBlocked(true);
-        
+
         // Clear any existing error timer since we're setting a blocking message
         if (errorTimer) {
           clearTimeout(errorTimer);
           setErrorTimer(null);
         }
-        
+
         setErrors({
-          general: "Too many failed login attempts. Please wait 5 minutes before trying again.",
+          general:
+            "Too many failed login attempts. Please wait 5 minutes before trying again.",
         });
-        
+
         // Set timer to unblock user after 5 minutes
         const blockingTimer = setTimeout(() => {
           setIsBlocked(false);
@@ -270,12 +274,12 @@ const Login = () => {
           // Also clear the error message when unblocking
           setErrors({});
         }, 5 * 60 * 1000); // 5 minutes
-        
+
         setBlockTimer(blockingTimer);
       }
-      
+
       // Clear password field on failed login for security
-      setFormData(prev => ({ ...prev, password: "" }));
+      setFormData((prev) => ({ ...prev, password: "" }));
     } finally {
       setIsLoading(false);
     }
@@ -354,15 +358,22 @@ const Login = () => {
           </div>
 
           {/* Submit Button */}
-          <button type="submit" className="submit-button" disabled={isLoading || isBlocked}>
-            {isBlocked ? "Account Temporarily Blocked" : isLoading ? "Logging in..." : "Login"}
+          <button
+            type="submit"
+            className="submit-button"
+            disabled={isLoading || isBlocked}
+          >
+            {isBlocked
+              ? "Account Temporarily Blocked"
+              : isLoading
+              ? "Logging in..."
+              : "Login"}
           </button>
         </form>
 
         {/* Footer Link */}
         <p className="footer-text">
-          Don&apos;t have an account?
-          <a href="mailto:admin@company.com"> Contact Admin</a>
+          Login issues? Please contact <a href="tel:+94812492311"> Admin</a>
         </p>
       </div>
     </div>

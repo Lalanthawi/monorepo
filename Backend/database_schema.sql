@@ -52,7 +52,7 @@ CREATE TABLE tasks (
     title VARCHAR(200) NOT NULL,
     description TEXT,
     customer_id INT,
-    priority ENUM('High', 'Medium', 'Low') DEFAULT 'Medium',
+    priority ENUM('High', 'Medium', 'Low', 'Urgent') DEFAULT 'Medium',
     status ENUM('Pending', 'Assigned', 'In Progress', 'Completed', 'Cancelled') DEFAULT 'Pending',
     created_by INT NOT NULL,
     assigned_to INT,

@@ -383,6 +383,11 @@ body {
   color: #2563eb;
 }
 
+.priority.urgent {
+  background: #fecaca;
+  color: #b91c1c;
+}
+
 .task-item h4 {
   font-size: 16px;
   margin-bottom: 5px;
@@ -1762,6 +1767,11 @@ form {
   color: #991b1b;
 }
 
+.priority.urgent {
+  background: #fecaca;
+  color: #b91c1c;
+}
+
 /* Button Styles */
 .btn-primary {
   background: #3b82f6;
@@ -2310,8 +2320,8 @@ form {
 }
 
 .overview-single-column .priority.urgent {
-  background: #f3e8ff;
-  color: #7c3aed;
+  background: #fecaca;
+  color: #b91c1c;
 }
 
 /* Task content */
@@ -3782,6 +3792,11 @@ form {
 .overview-single .priority.low {
   background: #dbeafe;
   color: #2563eb;
+}
+
+.overview-single .priority.urgent {
+  background: #fecaca;
+  color: #b91c1c;
 }
 
 /* Task Title */
@@ -5494,6 +5509,11 @@ form {
 .recent-tasks-section .priority.low {
   background: #f0f9ff;
   color: #0284c7;
+}
+
+.recent-tasks-section .priority.urgent {
+  background: #fef2f2;
+  color: #dc2626;
 }
 
 .recent-tasks-section .status.pending {
